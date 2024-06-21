@@ -21,3 +21,8 @@ class RegisterSchema(Schema):
     def validate_phone(self, value):
         if value and User.query.filter_by(phone=value).first():
             raise ValidationError('Phone number already exists.')
+
+
+class LoginSchema(Schema):
+    email = fields.Email(required=True, validate=validate.Email(error="Invalid email address"))
+    password = fields.Str(required=True, validate=validate.Length(min=6))
