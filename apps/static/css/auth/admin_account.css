@@ -1,0 +1,14 @@
+
+/* btn
+------------------------------------------------------- */
+.btn__lock {
+    background-color:red;
+}
+
+.account_group {
+        margin-top: 50px;
+    text-align: center;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
