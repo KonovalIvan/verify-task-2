@@ -1,0 +1,37 @@
+/* Intro
+------------------------------------------------------- */
+.intro {
+}
+
+.name {
+  font-size: 36px;
+}
+
+.description {
+}
+
+/* Login
+------------------------------------------------------- */
+.login_group {
+  margin-top: 50px;
+  text-align: center;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+.btn__login {
+  background-color: blue;
+}
+
+.btn__register {
+  background-color: darkgreen;
+}
+
+.btn__account {
+  background-color: goldenrod;
+}
+
+.btn__logout {
+  background-color: darkred;
+}

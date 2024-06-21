@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="../static/css/index.css">
+{% endblock %}
+
+{% block content %}
+    <div class="intro">
+        <h1 class="name">Hello, this is second verify task!</h1>
+        <p class="description">hope you like it :)</p>
+        {% if user.is_authenticated %}
+            <p class="description">Hello {{ user.name }} {{ surname }}</p>
+        {% else %}
+            <p class="description">You not logging yet</p>
+        {% endif %}
+    </div>
+    <div class="login_group">
+        {% if user.is_authenticated %}
+            <a class="btn btn__account" href="{{ url_for('auth.account') }}">Account</a>
+            <a class="btn btn__logout" href="{{ url_for('auth.logout') }}">Logout</a>
+        {% else %}
+            <a class="btn btn__login" href="{{ url_for('auth.login') }}">Login</a>
+            <a class="btn btn__register" href="{{ url_for('auth.register') }}">Register</a>
+        {% endif %}
+    </div>
+{% endblock %}

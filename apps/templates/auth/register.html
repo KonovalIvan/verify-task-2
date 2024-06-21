@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="../../static/css/auth/register.css">
+{% endblock %}
+
+{% block content %}
+    <div class="intro">
+        <h1 class="name">Register page!</h1>
+    </div>
+    <div class="register_group">
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="register_group__elements">
+                <div class="register_element">
+                    {{ form.name.label(class="description") }}
+                    {{ form.name(class="input_field") }}
+                </div>
+                <div class="register_element">
+                    {{ form.surname.label(class="description") }}
+                    {{ form.surname(class="input_field") }}
+                </div>
+                <div class="register_element">
+                    {{ form.email.label(class="description") }}
+                    {{ form.email(class="input_field") }}
+                </div>
+                <div class="register_element">
+                    {{ form.password.label(class="description") }}
+                    {{ form.password(class="input_field") }}
+                </div>
+                <div class="register_element">
+                    {{ form.confirm_password.label(class="description") }}
+                    {{ form.confirm_password(class="input_field") }}
+                </div>
+                <div class="register_element">
+                    {{ form.phone.label(class="description") }}
+                    {{ form.phone(class="input_field") }}
+                </div>
+            </div>
+            <input type="submit" class="btn btn__register" value="Register">
+        </form>
+    </div>
+{% endblock %}

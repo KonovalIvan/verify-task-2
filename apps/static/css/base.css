@@ -1,0 +1,41 @@
+body {
+  text-align: center;
+  background-image: url("../img/Frame 2.png");
+}
+
+.btn {
+    display: inline-block;
+    vertical-align: top;
+    padding: 17px 50px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.61;
+    text-decoration: none;
+
+    border-radius: 2px;
+    border: 0;
+    cursor: pointer;
+
+    transition: background .1s linear;
+}
+
+.btn {
+    width: 282px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.back {
+    font-size: 18px;
+    font-style: italic;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px;
+    height: 100px;
+}
