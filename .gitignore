@@ -1,0 +1,11 @@
+# cache
+__pycache__/
+*.py[cod]
+*$py.class
+.idea
+
+# enviropment
+venv/
+
+# db
+db.sqllite3
