@@ -9,6 +9,7 @@ from apps.auth.models import Role, User
 from apps.database import db
 
 load_dotenv()
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
 
 def create_app():
@@ -29,14 +30,13 @@ def create_app():
         db.session.commit()
 
     # Flask-Security
-    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     app.security = Security(app, user_datastore)
 
     # register routes
     import apps.routes as home
     import apps.auth.routes as auth
     app.register_blueprint(home.module)
-    app.register_blueprint(auth.module)
+    app.register_blueprint(auth.module, url_prefix='/auth')
 
     # Migrations
     app.migrate = Migrate(app, db)

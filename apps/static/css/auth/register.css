@@ -1,0 +1,42 @@
+
+/* Intro
+------------------------------------------------------- */
+.name {
+    font-size: 36px;
+}
+
+.description {
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+/* Register
+------------------------------------------------------- */
+.register_group {
+    margin-top: 50px;
+    text-align: center;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+.btn__register {
+  background-color: darkgreen;
+}
+
+.input_field {
+    width: 282px;
+    height: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.register_group__elements {
+    width: 500px;
+}
+
+.register_element {
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="This web page created for verify task 2">
+    <title>{% block title %}{% endblock %}</title>
+    {% block stylesheet %}{% endblock %}
+    <link rel="stylesheet" href="../static/css/base.css">
+  </head>
+  <body>
+    <button class="back" onclick="history.back()">Back</button>
+    {% block content %}{% endblock %}
+  </body>
+</html>
