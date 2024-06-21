@@ -2,7 +2,7 @@
 
 {% block title %}Home{% endblock %}
 {% block stylesheet %}
-    <link rel="stylesheet" href="../../static/css/auth/login.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/login.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -17,15 +17,18 @@
     <div class="login_group">
         <form method="post">
             {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.email.label(class="description") }}
-                {{ form.email(class="input_field") }}
+            <div class="login_group__elements">
+                <div class="login_element">
+                    {{ form.email.label(class="description") }}
+                    {{ form.email(class="input_field") }}
+                </div>
+                <div class="login_element">
+                    {{ form.password.label(class="description") }}
+                    {{ form.password(class="input_field") }}
+                </div>
+                <a class="btn btn__forgot" href="{{ url_for('auth.reset_password') }}">Forgot passsword?</a>
+                <input type="submit" class="btn btn__login" value="Login">
             </div>
-            <div class="form-group">
-                {{ form.password.label(class="description") }}
-                {{ form.password(class="input_field") }}
-            </div>
-            <input type="submit" class="btn btn__login" value="Login">
         </form>
     </div>
 {% endblock %}

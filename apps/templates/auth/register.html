@@ -2,7 +2,7 @@
 
 {% block title %}Register{% endblock %}
 {% block stylesheet %}
-    <link rel="stylesheet" href="../../static/css/auth/register.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/register.css') }}">
 {% endblock %}
 
 {% block content %}
