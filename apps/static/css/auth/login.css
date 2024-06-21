@@ -1,0 +1,33 @@
+
+/* Intro
+------------------------------------------------------- */
+.name {
+    font-size: 36px;
+}
+
+.description {
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+/* Login
+------------------------------------------------------- */
+.login_group {
+    margin-top: 50px;
+    text-align: center;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+.btn__login {
+    background-color: blue;
+}
+
+.input_field {
+    width: 282px;
+    height: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}

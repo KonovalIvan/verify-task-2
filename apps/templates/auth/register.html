@@ -9,6 +9,11 @@
     <div class="intro">
         <h1 class="name">Register page!</h1>
     </div>
+    <div class="intro">
+        {% for message in get_flashed_messages() %}
+            <p class="description">{{ message }}</p>
+        {% endfor %}
+    </div>
     <div class="register_group">
         <form method="post">
             {{ form.hidden_tag() }}
