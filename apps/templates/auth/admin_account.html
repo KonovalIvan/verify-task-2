@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Account{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/admin_account.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="intro">
+        <h1 class="name">Admin page</h1>
+    </div>
+    <div class="account">
+        <h2>User list</h2>
+        {% for user in users %}
+            <div class="account_group">
+                <h3 class="description">{{ user.name }} {{ user.surname }} {{ user.is_active }}</h3>
+                {% if user.is_active %}
+                    <a class="btn btn__lock" href="{{ url_for('auth.deactivate', user_id=user.id) }}">Deactivate account</a>
+                {% else %}
+                    <a class="btn btn__lock" href="{{ url_for('auth.activate', user_id=user.id) }}">Activate account</a>
+                {% endif %}
+                <select name="cars" id="cars" form="carform">
+                    {% for role in roles %}
+                        <option value="{{ role.name }}">{{ role.name }}</option>
+                    {% endfor %}
+                </select>
+                <a class="btn btn__lock" href="{{ url_for('auth.account') }}">Add the role</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

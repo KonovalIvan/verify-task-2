@@ -1,12 +1,13 @@
 from flask import redirect, url_for, Blueprint, request, flash, render_template
-from flask_security import logout_user, login_user
+from flask_login import login_required
+from flask_security import logout_user, login_user, roles_required
 from flask_security.recoverable import send_reset_password_instructions
 from marshmallow import ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from apps import user_datastore
 from apps.auth.forms import RegisterForm, LoginForm, ResetPasswordForm, NewPasswordForm
-from apps.auth.models import User
+from apps.auth.models import User, Role
 from apps.database import db
 from apps.auth.shemas import RegisterSchema, LoginSchema, NewPasswordSchema
 
@@ -64,14 +65,40 @@ def account():
 
 
 @module.route('/admin_account')
+@roles_required('admin')
 def admin_account():
-    return "admin_account"
+    users = User.query.all()
+    roles = Role.query.all()
+    return render_template('auth/admin_account.html', users=users, roles=roles)
 
 
 @module.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('home.home'))
+
+
+@module.route('/deactivate/<user_id>')
+@login_required
+@roles_required('admin')
+def deactivate(user_id):
+    user = User.query.get(user_id)
+    user_datastore.deactivate_user(user)
+    db.session.commit()
+    flash(f'{user.name} {user.surname} has been deactivated', 'success')
+    return redirect(request.referrer or url_for('home.home'))
+
+
+@module.route('/activate/<user_id>')
+@login_required
+@roles_required('admin')
+def activate(user_id):
+    user = User.query.get(user_id)
+    user_datastore.activate_user(user)
+    db.session.commit()
+    flash(f'{user.name} {user.surname} has been activated', 'success')
+    return redirect(request.referrer or url_for('home.home'))
 
 
 @module.route('/reset_password', methods=['GET', 'POST'])
