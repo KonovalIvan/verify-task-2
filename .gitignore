@@ -9,3 +9,6 @@ venv/
 
 # db
 db.sqllite3
+
+# env
+# .env
