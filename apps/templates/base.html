@@ -5,7 +5,7 @@
     <meta name="description" content="This web page created for verify task 2">
     <title>{% block title %}{% endblock %}</title>
     {% block stylesheet %}{% endblock %}
-    <link rel="stylesheet" href="../static/css/base.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
   </head>
   <body>
     <button class="back" onclick="history.back()">Back</button>

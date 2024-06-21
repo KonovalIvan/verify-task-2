@@ -1,6 +1,6 @@
 body {
-  text-align: center;
-  background-image: url("../img/Frame 2.png");
+    text-align: center;
+    background-image: url("../img/Frame 2.png");
 }
 
 .btn {
@@ -17,14 +17,8 @@ body {
     line-height: 1.61;
     text-decoration: none;
 
-    border-radius: 2px;
     border: 0;
     cursor: pointer;
-
-    transition: background .1s linear;
-}
-
-.btn {
     width: 282px;
     border-radius: 20px;
     margin-bottom: 20px;
