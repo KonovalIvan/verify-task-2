@@ -1,12 +1,11 @@
 from flask import redirect, url_for, Blueprint, request, flash, render_template
 from flask_login import login_required
-from flask_security import logout_user, login_user, roles_required
-from flask_security.recoverable import send_reset_password_instructions
+from flask_security import logout_user, login_user, roles_required, ChangePasswordForm, PasswordlessLoginForm, LoginForm
 from marshmallow import ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from apps import user_datastore
-from apps.auth.forms import RegisterForm, LoginForm, ResetPasswordForm, NewPasswordForm
+from apps.auth.forms import MyRegisterForm
 from apps.auth.models import User, Role
 from apps.database import db
 from apps.auth.shemas import RegisterSchema, LoginSchema, NewPasswordSchema
@@ -38,7 +37,7 @@ def login():
 
 @module.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm()
+    form = MyRegisterForm()
     if request.method == 'POST' and form.validate_on_submit():
         register_schema = RegisterSchema()
         try:
@@ -55,6 +54,9 @@ def register():
             db.session.commit()
             return redirect(url_for('home.home'))
         except ValidationError as ex:
+            form.password_confirm.errors.append(
+                ex.messages
+            )
             flash(ex.messages, 'error')
     return render_template('auth/register.html', form=form)
 
@@ -103,7 +105,7 @@ def activate(user_id):
 
 @module.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
-    form = ResetPasswordForm()
+    form = PasswordlessLoginForm()
     if request.method == 'POST' and form.validate_on_submit():
         email = request.form.get('email')
         if user := User.query.filter_by(email=email).first():
@@ -118,7 +120,7 @@ def reset_password():
 def new_password_test(user_id):
     # TODO: simple logic for tests, change to normal sending and changing password by token from
     #  send_reset_password_instructions()
-    form = NewPasswordForm()
+    form = ChangePasswordForm()
     if request.method == 'POST' and form.validate_on_submit():
         register_schema = NewPasswordSchema()
         user = User.query.get(user_id)

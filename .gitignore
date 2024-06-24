@@ -9,6 +9,7 @@ venv/
 
 # env
 # .env
+.env.prod
 
 #db and migrations
 migrations

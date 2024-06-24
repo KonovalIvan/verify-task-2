@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from flask import Flask
+from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_security import SQLAlchemyUserDatastore, Security
 
@@ -9,11 +10,14 @@ from apps.auth.models import Role, User
 from apps.database import db
 
 load_dotenv()
+
+app = Flask(__name__)
+mail = Mail()
+security = Security()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
 
 def create_app():
-    app = Flask(__name__)
     app.config.from_object(os.environ['APP_SETTINGS'])
 
     # Database
@@ -30,15 +34,19 @@ def create_app():
         db.session.commit()
 
     # Flask-Security
-    app.security = Security(app, user_datastore)
+    security.init_app(app, user_datastore)
+
+    # Migrations
+    app.migrate = Migrate(app, db)
+
+    # Email
+    app.debug = 0
+    mail.init_app(app)
 
     # register routes
     import apps.routes as home
     import apps.auth.routes as auth
     app.register_blueprint(home.module)
     app.register_blueprint(auth.module, url_prefix='/auth')
-
-    # Migrations
-    app.migrate = Migrate(app, db)
 
     return app
