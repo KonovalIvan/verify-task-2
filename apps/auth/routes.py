@@ -103,6 +103,34 @@ def activate(user_id):
     return redirect(request.referrer or url_for('home.home'))
 
 
+@module.route('/add_permission/<user_id>/<role_name>')
+@login_required
+@roles_required('admin')
+def add_permission(user_id, role_name):
+    user = User.query.get(user_id)
+    role = user_datastore.find_role(role_name)
+    user.roles.append(role)
+    db.session.commit()
+    flash(f'Permission {role_name} for {user.name} {user.surname} has been added', 'success')
+    return redirect(request.referrer or url_for('home.home'))
+
+
+@module.route('/cancel_permission/<user_id>/<role_name>')
+@login_required
+@roles_required('admin')
+def cancel_permission(user_id, role_name):
+    user = User.query.get(user_id)
+    role = user_datastore.find_role(role_name)
+    if role in user.roles:
+        db.session.refresh(user)
+        user.roles.remove(role)
+        db.session.commit()
+        flash(f'Permission {role_name} for {user.name} {user.surname} has been removed', 'success')
+    else:
+        flash(f'User {user.name} {user.surname} has not permision {role_name}', 'success')
+    return redirect(request.referrer or url_for('home.home'))
+
+
 @module.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     form = PasswordlessLoginForm()
