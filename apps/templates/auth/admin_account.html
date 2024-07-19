@@ -12,6 +12,9 @@
 {% block content %}
     <div class="intro">
         <h1 class="name">Admin page</h1>
+        {% for message in get_flashed_messages() %}
+            <p class="description">{{ message }}</p>
+        {% endfor %}
     </div>
     <div class="account">
         <h2>User list</h2>
@@ -33,8 +36,12 @@
                             <option value="{{ role.name }}">{{ role.name }}</option>
                         {% endfor %}
                     </select>
-                    <a class="btn__add" href="{{ url_for('auth.add_permission', user_id=user.id, role_name='ROLE_NAME') }}" data-user-id="{{ user.id }}"></a>
-                    <a class="btn__sub" href="{{ url_for('auth.cancel_permission', user_id=user.id, role_name='ROLE_NAME') }}" data-user-id="{{ user.id }}"></a>
+                    <a class="btn__add"
+                       href="{{ url_for('auth.add_permission', user_id=user.id, role_name='ROLE_NAME') }}"
+                       data-user-id="{{ user.id }}"></a>
+                    <a class="btn__sub"
+                       href="{{ url_for('auth.cancel_permission', user_id=user.id, role_name='ROLE_NAME') }}"
+                       data-user-id="{{ user.id }}"></a>
                     {% if user.is_active %}
                         <a class="btn__unlock" href="{{ url_for('auth.deactivate', user_id=user.id) }}">
                         </a>
