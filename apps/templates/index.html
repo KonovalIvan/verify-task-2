@@ -18,7 +18,7 @@
     <div class="login_group">
         {% if user.is_authenticated %}
             {% if user.has_role('admin') %}
-                <a class="btn btn__account" href="{{ url_for('auth.admin_account') }}">Admin account</a>
+                <a class="btn btn__account" href="{{ url_for('admin_panel.admin_panel') }}">Admin Panel</a>
             {% else %}
                 <a class="btn btn__account" href="{{ url_for('auth.account') }}">Account</a>
             {% endif %}

@@ -11,7 +11,7 @@ from apps.database import db
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='apps/templates', static_folder='apps/static')
 mail = Mail()
 security = Security()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)

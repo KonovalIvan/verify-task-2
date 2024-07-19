@@ -1,12 +1,12 @@
 from flask import redirect, url_for, Blueprint, request, flash, render_template
 from flask_login import login_required
-from flask_security import logout_user, login_user, roles_required, ChangePasswordForm, PasswordlessLoginForm, LoginForm
+from flask_security import logout_user, login_user, ChangePasswordForm, PasswordlessLoginForm, LoginForm
 from marshmallow import ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from apps import user_datastore
 from apps.auth.forms import MyRegisterForm
-from apps.auth.models import User, Role
+from apps.auth.models import User
 from apps.database import db
 from apps.auth.shemas import RegisterSchema, LoginSchema, NewPasswordSchema
 
@@ -66,69 +66,11 @@ def account():
     return "account"
 
 
-@module.route('/admin_account')
-@roles_required('admin')
-def admin_account():
-    users = User.query.all()
-    roles = Role.query.all()
-    return render_template('auth/admin_account.html', users=users, roles=roles)
-
-
 @module.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('home.home'))
-
-
-@module.route('/deactivate/<user_id>')
-@login_required
-@roles_required('admin')
-def deactivate(user_id):
-    user = User.query.get(user_id)
-    user_datastore.deactivate_user(user)
-    db.session.commit()
-    flash(f'{user.name} {user.surname} has been deactivated', 'success')
-    return redirect(request.referrer or url_for('home.home'))
-
-
-@module.route('/activate/<user_id>')
-@login_required
-@roles_required('admin')
-def activate(user_id):
-    user = User.query.get(user_id)
-    user_datastore.activate_user(user)
-    db.session.commit()
-    flash(f'{user.name} {user.surname} has been activated', 'success')
-    return redirect(request.referrer or url_for('home.home'))
-
-
-@module.route('/add_permission/<user_id>/<role_name>')
-@login_required
-@roles_required('admin')
-def add_permission(user_id, role_name):
-    user = User.query.get(user_id)
-    role = user_datastore.find_role(role_name)
-    user.roles.append(role)
-    db.session.commit()
-    flash(f'Permission {role_name} for {user.name} {user.surname} has been added', 'success')
-    return redirect(request.referrer or url_for('home.home'))
-
-
-@module.route('/cancel_permission/<user_id>/<role_name>')
-@login_required
-@roles_required('admin')
-def cancel_permission(user_id, role_name):
-    user = User.query.get(user_id)
-    role = user_datastore.find_role(role_name)
-    if role in user.roles:
-        db.session.refresh(user)
-        user.roles.remove(role)
-        db.session.commit()
-        flash(f'Permission {role_name} for {user.name} {user.surname} has been removed', 'success')
-    else:
-        flash(f'User {user.name} {user.surname} has not permision {role_name}', 'success')
-    return redirect(request.referrer or url_for('home.home'))
 
 
 @module.route('/reset_password', methods=['GET', 'POST'])

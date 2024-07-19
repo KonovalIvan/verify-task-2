@@ -12,20 +12,20 @@
 
 .btn__lock {
     background-color: red;
-    background-image: url("../../img/Group 12.png");
+    background-image: url("../../img/lock.png");
 }
 
 .btn__unlock {
     background-color: green;
-    background-image: url("../../img/Group 14.png");
+    background-image: url("../../img/unlock.png");
 }
 
 .btn__add {
-    background-image: url("../../img/Group 15.png");
+    background-image: url("../../img/add.png");
 }
 
 .btn__sub {
-    background-image: url("../../img/Group 16.png");
+    background-image: url("../../img/subtract.png");
 }
 
 .account {
