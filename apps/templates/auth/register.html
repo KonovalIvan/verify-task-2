@@ -10,6 +10,9 @@
         <h1 class="name">Register page!</h1>
     </div>
     <div class="intro">
+        {% for category, message in messages %}
+            <li class="description">{{ message }}</li>
+        {% endfor %}
         {% for message in get_flashed_messages() %}
             <p class="description">{{ message }}</p>
         {% endfor %}
@@ -35,15 +38,15 @@
                     {{ form.password(class="input_field") }}
                 </div>
                 <div class="register_element">
-                    {{ form.confirm_password.label(class="description") }}
-                    {{ form.confirm_password(class="input_field") }}
+                    {{ form.password_confirm.label(class="description") }}
+                    {{ form.password_confirm(class="input_field") }}
                 </div>
                 <div class="register_element">
                     {{ form.phone.label(class="description") }}
                     {{ form.phone(class="input_field") }}
                 </div>
             </div>
-            <input type="submit" class="btn btn__register" value="Register">
+            {{ form.submit(class="btn btn__register") }}
         </form>
     </div>
 {% endblock %}
