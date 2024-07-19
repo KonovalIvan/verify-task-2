@@ -5,38 +5,43 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/admin_account.css') }}">
 {% endblock %}
 
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/admin_account.js') }}"></script>
+{% endblock %}
+
 {% block content %}
     <div class="intro">
         <h1 class="name">Admin page</h1>
     </div>
     <div class="account">
         <h2>User list</h2>
-        <div class="account_element">
+        <div class="account_element__header">
             <p class="list_element">Name</p>
             <p class="list_element">Email</p>
-            <p class="list_element">Role</p>
+            <p class="list_element">Roles</p>
             <p class="list_element">Actions</p>
         </div>
         {% for user in users %}
-            <div class="account_element">
+            <div class="account_element {% if not user.is_active %}account_element__inactive{% endif %}">
                 <p class="list_element">{{ user.name }} {{ user.surname }}</p>
                 <p class="list_element">{{ user.email }}</p>
                 <p class="list_element">{{ user.roles }}</p>
-                <div class="list_element">
-                    {% if user.is_active %}
-                        <a class="btn btn__lock btn__unlock" href="{{ url_for('auth.deactivate', user_id=user.id) }}">Deactivate
-                            account</a>
-                    {% else %}
-                        <a class="btn btn__lock" href="{{ url_for('auth.activate', user_id=user.id) }}">Activate
-                            account</a>
-                    {% endif %}
+                <div class="list_element2">
                     {# TODO:Create one element and then clone hix#}
-                    <select name="cars" id="cars" form="carform">
+                    <select class="role" data-user-id="{{ user.id }}">
                         {% for role in roles %}
                             <option value="{{ role.name }}">{{ role.name }}</option>
                         {% endfor %}
                     </select>
-                    <a class="btn__lock btn__add" href="{{ url_for('auth.account') }}">Add the role</a>
+                    <a class="btn__add" href="{{ url_for('auth.add_permission', user_id=user.id, role_name='ROLE_NAME') }}" data-user-id="{{ user.id }}"></a>
+                    <a class="btn__sub" href="{{ url_for('auth.cancel_permission', user_id=user.id, role_name='ROLE_NAME') }}" data-user-id="{{ user.id }}"></a>
+                    {% if user.is_active %}
+                        <a class="btn__unlock" href="{{ url_for('auth.deactivate', user_id=user.id) }}">
+                        </a>
+                    {% else %}
+                        <a class="btn__lock" href="{{ url_for('auth.activate', user_id=user.id) }}">
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
