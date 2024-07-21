@@ -17,14 +17,16 @@ class AppConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Mail
-    MAIL_SERVER = os.environ['MAIL_SERVER']
-    MAIL_PORT = os.environ['MAIL_PORT']
-    MAIL_USE_TLS = os.environ['MAIL_USE_TLS']
-    MAIL_USERNAME = os.environ['MAIL_USERNAME']
-    MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
+    # MAIL_SERVER = os.environ['MAIL_SERVER']
+    # MAIL_PORT = os.environ['MAIL_PORT']
+    # MAIL_USE_TLS = os.environ['MAIL_USE_TLS']
+    # MAIL_USERNAME = os.environ['MAIL_USERNAME']
+    # MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
 
     SECURITY_REGISTERABLE = False
-    SECURITY_PASSWORD_SALT = bytes(123)
+    SECURITY_PASSWORD_SALT = 'bcrypt'
+
+    USERNAME_ENABLED = False
 
     SESSION_PERMANENT = os.environ['SESSION_PERMANENT']
     SECURITY_PASSWORD_HASH = os.environ['SECURITY_PASSWORD_HASH']

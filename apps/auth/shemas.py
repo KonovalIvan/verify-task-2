@@ -26,9 +26,3 @@ class RegisterSchema(Schema):
 class LoginSchema(Schema):
     email = fields.Email(required=True, validate=validate.Email(error="Invalid email address"))
     password = fields.Str(required=True, validate=validate.Length(min=6))
-
-
-class NewPasswordSchema(Schema):
-    password = fields.String(required=True, validate=validate.Length(min=6, max=121))
-    confirm_password = fields.String(required=True, validate=validate.Length(min=6, max=121))
-    csrf_token = fields.String(load_only=True)

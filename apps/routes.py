@@ -6,5 +6,5 @@ module = Blueprint('home', __name__)
 
 @module.route('/home')
 @module.route('/')
-def home():  # put application's code here
+def home():
     return render_template('index.html', user=current_user)

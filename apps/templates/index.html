@@ -15,6 +15,11 @@
             <p class="description">You not logging yet</p>
         {% endif %}
     </div>
+    <div class="intro">
+        {% for message in get_flashed_messages() %}
+            <p class="description">{{ message }}</p>
+        {% endfor %}
+    </div>
     <div class="login_group">
         {% if user.is_authenticated %}
             {% if user.has_role('admin') %}
