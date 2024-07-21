@@ -49,8 +49,11 @@
                         <a class="btn__lock" href="{{ url_for('admin_panel.activate', user_id=user.id) }}">
                         </a>
                     {% endif %}
+                    <a class="btn__delete"
+                       href="{{ url_for('admin_panel.delete_user', user_id=user.id) }}"></a>
                 </div>
             </div>
         {% endfor %}
+        <a class="account_element add_user" href="{{ url_for('admin_panel.force_create_user') }}">Add new user</a>
     </div>
 {% endblock %}

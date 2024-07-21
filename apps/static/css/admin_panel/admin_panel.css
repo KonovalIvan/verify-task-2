@@ -10,7 +10,7 @@
 
 .account_element, .admin_panel__header {
     border-radius: 10px;
-    width: 90vw;
+    width: 90%;
     background-color: #F3F3F3;
     text-align: center;
     display: flex;
@@ -19,7 +19,22 @@
 }
 
 .account_element__inactive {
-        background-color: #FFC0C0;
+    background-color: #FFC0C0;
+}
+
+.add_user {
+    justify-content: center;
+    align-items: center;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: black;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+
+    min-height: 50px;
 }
 
 .admin_panel__header {
@@ -50,19 +65,26 @@
 
 /* Buttons
 ------------------------------------------------------- */
-.btn__lock, .btn__unlock, .btn__add, .btn__sub {
+.btn__lock, .btn__unlock, .btn__add, .btn__sub, .btn__delete {
     width: 22px;
     height: 22px;
     border-radius: 4px;
     display: flex;
     justify-content: center;
     object-fit: fill;
+    background-size: contain;
     background-repeat: no-repeat;
 }
 
 .btn__lock {
     background-color: red;
     background-image: url("../../img/lock.png");
+}
+
+.btn__delete {
+    background-color: transparent;
+    background-image: url("../../img/delete.png");
+    display: inline-block;
 }
 
 .btn__unlock {

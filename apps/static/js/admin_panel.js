@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     let addButtons = document.querySelectorAll('.btn__add');
     let subButtons = document.querySelectorAll('.btn__sub');
-    let selectElements = document.querySelectorAll('.role');
+    let selectElements = document.querySelectorAll('.role__element');
 
     addButtons.forEach(button => {
         button.addEventListener('click', function (event) {
