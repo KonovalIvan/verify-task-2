@@ -35,6 +35,7 @@ def delete_user(user_id):
 
 @module.route('/force_create_user', methods=['GET', 'POST'])
 def force_create_user():
+    # TODO: DO not send email, admin can create user without confirm
     form = MyRegisterForm()
     if form.validate_on_submit():
         user = user_datastore.create_user(
