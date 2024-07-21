@@ -12,8 +12,8 @@ class MyRegisterForm(RegisterForm):
 
     def validate_on_submit(self, extra_validators=None):
         if User.query.filter_by(phone=self.phone.data).first():
-            self.password_confirm.errors.append(
-                'Phone number already used. Please choose a different'
+            self.phone.errors += (
+                'Phone number already used. Please choose a different',
             )
             return False
         return super().validate_on_submit(extra_validators=extra_validators)

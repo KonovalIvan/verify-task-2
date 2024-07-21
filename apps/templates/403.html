@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="intro_403">
+        <h1 class="intro__head">You have no permission to this page</h1>
+        <h1 class="intro__head">OOPS</h1>
+    </div>
+{% endblock %}

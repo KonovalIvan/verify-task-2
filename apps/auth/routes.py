@@ -1,10 +1,8 @@
-from http import HTTPStatus
-
-from flask import redirect, url_for, Blueprint, request, flash, render_template, abort
+from flask import redirect, url_for, Blueprint, flash, render_template, request
 from flask_login import login_required
 from flask_security import logout_user, login_user, LoginForm, ResetPasswordForm, ForgotPasswordForm, hash_password
 
-from apps import user_datastore, login_manager
+from apps import user_datastore
 from apps.auth.forms import MyRegisterForm
 from apps.auth.models import User
 from apps.database import db
@@ -12,26 +10,14 @@ from apps.database import db
 module = Blueprint('auth', __name__, url_prefix='/auth')
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    user_datastore.add_role_to_user(User.query.get(user_id), user_datastore.find_role('admin'))
-    return User.query.get(user_id)
-
-
-# @login_manager.unauthorized_handler
-# def unauthorized():
-#     if request.blueprint == 'api':
-#         abort(HTTPStatus.UNAUTHORIZED)
-#     return redirect(url_for('site.login'))
-
-
 @module.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         login_user(form.user)
+        next_page = request.args.get('next') or url_for('home.home')
         flash('Logged in successfully.', 'success')
-        return redirect(url_for('home.home'))
+        return redirect(next_page)
     return render_template('auth/login.html', form=form)
 
 
