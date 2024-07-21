@@ -9,8 +9,14 @@ from apps.database import db
 module = Blueprint('admin_panel', __name__, url_prefix='/admin_panel')
 
 
-@module.route('/admin_panel')
+@module.before_request
+@login_required
 @roles_required('admin')
+def before_request():
+    pass
+
+
+@module.route('/admin_panel')
 def admin_panel():
     users = User.query.all()
     roles = Role.query.all()
@@ -18,7 +24,6 @@ def admin_panel():
 
 
 @module.route('/deactivate/<user_id>')
-@roles_required('admin')
 def deactivate(user_id):
     user = User.query.get(user_id)
     user_datastore.deactivate_user(user)
@@ -28,8 +33,6 @@ def deactivate(user_id):
 
 
 @module.route('/activate/<user_id>')
-@login_required
-@roles_required('admin')
 def activate(user_id):
     user = User.query.get(user_id)
     user_datastore.activate_user(user)
@@ -39,8 +42,6 @@ def activate(user_id):
 
 
 @module.route('/add_permission/<user_id>/<role_name>')
-@login_required
-@roles_required('admin')
 def add_permission(user_id, role_name):
     user = User.query.get(user_id)
     role = user_datastore.find_role(role_name)
@@ -51,16 +52,13 @@ def add_permission(user_id, role_name):
 
 
 @module.route('/cancel_permission/<user_id>/<role_name>')
-@login_required
-@roles_required('admin')
 def cancel_permission(user_id, role_name):
     user = User.query.get(user_id)
     role = user_datastore.find_role(role_name)
     if role in user.roles:
-        db.session.refresh(user)
         user.roles.remove(role)
         db.session.commit()
         flash(f'Permission {role_name} for {user.name} {user.surname} has been removed', 'success')
     else:
-        flash(f'User {user.name} {user.surname} has not permision {role_name}', 'success')
+        flash(f'Permission {role_name} doesnt exist', 'error')
     return redirect(request.referrer or url_for('home.home'))

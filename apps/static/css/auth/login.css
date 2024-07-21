@@ -1,15 +1,3 @@
-
-/* Intro
-------------------------------------------------------- */
-.name {
-    font-size: 36px;
-}
-
-.description {
-    font-size: 20px;
-    padding-bottom: 10px;
-}
-
 /* Login
 ------------------------------------------------------- */
 .login_group {
@@ -20,15 +8,17 @@
     align-items: center;
 }
 
-.login_element {
-    display: flex;
-    justify-content: space-between;
-}
-
 .login_group__elements {
     width: 500px;
 }
 
+.login__element {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Buttons
+------------------------------------------------------- */
 .btn__login {
     background-color: blue;
 }
@@ -37,6 +27,8 @@
     background-color: darkred;
 }
 
+/* Fields
+------------------------------------------------------- */
 .input_field {
     width: 282px;
     height: 20px;

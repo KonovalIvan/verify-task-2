@@ -1,3 +1,12 @@
+.intro__head {
+    font-size: 36px;
+}
+
+.description {
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
 body {
     text-align: center;
     background-image: url("../img/background.png");
@@ -24,7 +33,7 @@ body {
     margin-bottom: 20px;
 }
 
-.back {
+.btn__back {
     font-size: 18px;
     font-style: italic;
     position: absolute;
