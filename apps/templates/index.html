@@ -7,25 +7,23 @@
 
 {% block content %}
     <div class="intro">
-        <h1 class="name">Hello, this is second verify task!</h1>
-        <p class="description">hope you like it :)</p>
+        <h1 class="intro__head">Hello, this is second verify task!</h1>
         {% if user.is_authenticated %}
-            <p class="description">Hello {{ user.name }} {{ surname }} {{ user.roles }}</p>
+            <p class="description">Hello {{ user.name }} {{ surname }}</p>
         {% else %}
-            <p class="description">You not logging yet</p>
+            <p class="description">You're not logging</p>
         {% endif %}
-    </div>
-    <div class="intro">
         {% for message in get_flashed_messages() %}
             <p class="description">{{ message }}</p>
         {% endfor %}
     </div>
-    <div class="login_group">
+    <div class="nav_bar">
         {% if user.is_authenticated %}
             {% if user.has_role('admin') %}
                 <a class="btn btn__account" href="{{ url_for('admin_panel.admin_panel') }}">Admin Panel</a>
-            {% else %}
-                <a class="btn btn__account" href="{{ url_for('auth.account') }}">Account</a>
+            {% endif %}
+            {% if user.has_role('user') or  user.has_role('admin')%}
+                <a class="btn btn__account" href="{{ url_for('user_panel.user_panel') }}">Account</a>
             {% endif %}
             <a class="btn btn__logout" href="{{ url_for('auth.logout') }}">Logout</a>
         {% else %}

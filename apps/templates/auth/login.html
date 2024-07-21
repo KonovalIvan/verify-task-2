@@ -7,22 +7,25 @@
 
 {% block content %}
     <div class="intro">
-        <h1 class="name">Login page!</h1>
-    </div>
-    <div class="intro">
+        <h1 class="intro__head">Login page!</h1>
         {% for message in get_flashed_messages() %}
             <p class="description">{{ message }}</p>
+        {% endfor %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p class="description error">{{ error }}</p>
+            {% endfor %}
         {% endfor %}
     </div>
     <div class="login_group">
         <form method="post">
             {{ form.hidden_tag() }}
             <div class="login_group__elements">
-                <div class="login_element">
+                <div class="login__element">
                     {{ form.email.label(class="description") }}
                     {{ form.email(class="input_field") }}
                 </div>
-                <div class="login_element">
+                <div class="login__element">
                     {{ form.password.label(class="description") }}
                     {{ form.password(class="input_field") }}
                 </div>

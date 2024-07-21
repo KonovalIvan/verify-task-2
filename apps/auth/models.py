@@ -24,6 +24,14 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f'{self.name} {self.surname}'
 
+    @property
+    def is_active(self):
+        return self.active
+
+    def get_id(self):
+        """Return the email address to satisfy Flask-Login's requirements."""
+        return self.id
+
 
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)

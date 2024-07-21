@@ -2,7 +2,7 @@
 
 {% block title %}Account{% endblock %}
 {% block stylesheet %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/admin_panel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_panel/admin_panel.css') }}">
 {% endblock %}
 
 {% block scripts %}
@@ -11,42 +11,42 @@
 
 {% block content %}
     <div class="intro">
-        <h1 class="name">Admin page</h1>
+        <h1 class="intro__head">Admin page</h1>
         {% for message in get_flashed_messages() %}
             <p class="description">{{ message }}</p>
         {% endfor %}
     </div>
-    <div class="account">
+    <div class="admin_panel">
         <h2>User list</h2>
-        <div class="account_element__header">
-            <p class="list_element">Name</p>
-            <p class="list_element">Email</p>
-            <p class="list_element">Roles</p>
-            <p class="list_element">Actions</p>
+        <div class="admin_panel__header">
+            <p class="admin_header__element">Name</p>
+            <p class="admin_header__element">Email</p>
+            <p class="admin_header__element">Roles</p>
+            <p class="admin_header__element">Actions</p>
         </div>
         {% for user in users %}
             <div class="account_element {% if not user.is_active %}account_element__inactive{% endif %}">
-                <p class="list_element">{{ user.name }} {{ user.surname }}</p>
-                <p class="list_element">{{ user.email }}</p>
-                <p class="list_element">{{ user.roles }}</p>
-                <div class="list_element2">
+                <p class="admin_header__element">{{ user.name }} {{ user.surname }}</p>
+                <p class="admin_header__element">{{ user.email }}</p>
+                <p class="admin_header__element">{{ user.roles }}</p>
+                <div class="role_elements">
                     {# TODO:Create one element and then clone hix#}
-                    <select class="role" data-user-id="{{ user.id }}">
+                    <select class="role__element" data-user-id="{{ user.id }}">
                         {% for role in roles %}
                             <option value="{{ role.name }}">{{ role.name }}</option>
                         {% endfor %}
                     </select>
                     <a class="btn__add"
-                       href="{{ url_for('auth.add_permission', user_id=user.id, role_name='ROLE_NAME') }}"
+                       href="{{ url_for('admin_panel.add_permission', user_id=user.id, role_name='ROLE_NAME') }}"
                        data-user-id="{{ user.id }}"></a>
                     <a class="btn__sub"
-                       href="{{ url_for('auth.cancel_permission', user_id=user.id, role_name='ROLE_NAME') }}"
+                       href="{{ url_for('admin_panel.cancel_permission', user_id=user.id, role_name='ROLE_NAME') }}"
                        data-user-id="{{ user.id }}"></a>
                     {% if user.is_active %}
-                        <a class="btn__unlock" href="{{ url_for('auth.deactivate', user_id=user.id) }}">
+                        <a class="btn__unlock" href="{{ url_for('admin_panel.deactivate', user_id=user.id) }}">
                         </a>
                     {% else %}
-                        <a class="btn__lock" href="{{ url_for('auth.activate', user_id=user.id) }}">
+                        <a class="btn__lock" href="{{ url_for('admin_panel.activate', user_id=user.id) }}">
                         </a>
                     {% endif %}
                 </div>
