@@ -35,7 +35,6 @@ def delete_user(user_id):
 
 @module.route('/force_create_user', methods=['GET', 'POST'])
 def force_create_user():
-    # TODO: DO not send email, admin can create user without confirm
     form = MyRegisterForm()
     if form.validate_on_submit():
         user = user_datastore.create_user(
@@ -44,10 +43,11 @@ def force_create_user():
             email=form.email.data,
             phone=form.phone.data,
             password=hash_password(form.password.data),
+            confirmed=True,
         )
         user_datastore.add_role_to_user(user, user_datastore.find_role('user'))
         db.session.commit()
-        return redirect(request.referrer)
+        return redirect(url_for('admin_panel.admin_panel'))
     return render_template('auth/register.html', form=form)
 
 

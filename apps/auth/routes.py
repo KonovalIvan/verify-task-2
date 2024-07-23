@@ -1,11 +1,15 @@
+from datetime import datetime
+
 from flask import redirect, url_for, Blueprint, flash, render_template, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from flask_security import logout_user, login_user, LoginForm, ResetPasswordForm, ForgotPasswordForm, hash_password
 
 from apps import user_datastore
 from apps.auth.forms import MyRegisterForm
 from apps.auth.models import User
 from apps.database import db
+from apps.auth.services import generate_and_send_auth_token
+from apps.auth.token import confirm_token
 
 module = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -21,6 +25,24 @@ def login():
     return render_template('auth/login.html', form=form)
 
 
+@module.route("/confirm_email/<token>")
+@login_required
+def confirm_email(token):
+    if current_user.confirmed:
+        flash("Account already confirmed.", "success")
+        return redirect(url_for("core.home"))
+    email = confirm_token(token)
+    user = User.query.filter_by(email=current_user.email).first_or_404()
+    if user.email == email:
+        user.confirmed = True
+        user.confirmed_on = datetime.now()
+        db.session.commit()
+        flash("You have confirmed your account. Thanks!", "success")
+    else:
+        flash("The confirmation link is invalid or has expired.", "danger")
+    return redirect(url_for('home.home'))
+
+
 @module.route('/register', methods=['GET', 'POST'])
 def register():
     form = MyRegisterForm()
@@ -34,14 +56,30 @@ def register():
         )
         user_datastore.add_role_to_user(user, user_datastore.find_role('user'))
         db.session.commit()
+        generate_and_send_auth_token(email=user.email)
+        login_user(user)
+
+        flash("A confirmation email has been sent via email.", "success")
         return redirect(url_for('home.home'))
     return render_template('auth/register.html', form=form)
+
+
+@module.route("/resend_confirm_email")
+@login_required
+def resend_confirm_email():
+    if current_user.confirmed:
+        flash("Your account has already been confirmed.", "success")
+        return redirect(url_for("core.home"))
+    generate_and_send_auth_token(email=current_user.email)
+    flash("A new confirmation email has been sent.", "success")
+    return redirect(url_for("home.inactive_account"))
 
 
 @module.route('/logout')
 @login_required
 def logout():
     logout_user()
+    flash('Logout in successfully.', 'success')
     return redirect(url_for('home.home'))
 
 
