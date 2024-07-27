@@ -49,6 +49,8 @@
                         <a class="btn__lock" href="{{ url_for('admin_panel.activate', user_id=user.id) }}">
                         </a>
                     {% endif %}
+                    <a class="btn__user_manager"
+                       href="{{ url_for('admin_panel.user_manager', user_id=user.id) }}"></a>
                     <a class="btn__delete"
                        href="{{ url_for('admin_panel.delete_user', user_id=user.id) }}"></a>
                 </div>

@@ -89,3 +89,9 @@ def cancel_permission(user_id, role_name):
 
     flash(f'Permission {role_name} for {_user} has been removed', 'success')
     return redirect(request.referrer or url_for('home.home'))
+
+
+@module.route('/user_manager/<user_id>', methods=['GET'])
+def user_manager(user_id):
+    _user = user_datastore.find_user(id=user_id)
+    return render_template('admin_panel/user_manager.html', user=_user)
