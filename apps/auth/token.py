@@ -1,21 +1,21 @@
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 
-from apps import app
-from apps.auth.consts import REGISTER_TOKEN_EXPIRATION_SECONDS
+from flask import current_app
+from apps.auth.consts import TOKEN_EXPIRATION_SECONDS
 
 
-def generate_confirmation_token(email):
-    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    return serializer.dumps(email, salt=app.config['SECURITY_PASSWORD_SALT'])
+def generate_token(email, purpose):
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    return serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'] + purpose)
 
 
-def confirm_token(token, expiration=REGISTER_TOKEN_EXPIRATION_SECONDS):
-    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+def confirm_token(token, purpose, expiration=TOKEN_EXPIRATION_SECONDS):
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     try:
         email = serializer.loads(
             token,
-            salt=app.config['SECURITY_PASSWORD_SALT'],
+            salt=current_app.config['SECURITY_PASSWORD_SALT'] + purpose,
             max_age=expiration
         )
         return email

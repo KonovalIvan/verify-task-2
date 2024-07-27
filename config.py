@@ -22,6 +22,9 @@ class AppConfig(object):
     MAIL_USE_TLS = os.environ['MAIL_USE_TLS']
     MAIL_USERNAME = os.environ['MAIL_USERNAME']
     MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
+    MAIL_DEFAULT_SENDER = os.environ['MAIL_USERNAME']
+
+    SESSION_COOKIE_SECURE = True
 
     SECURITY_REGISTERABLE = False
     SECURITY_PASSWORD_SALT = 'bcrypt'

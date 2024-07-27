@@ -6,10 +6,10 @@ from flask_security import logout_user, login_user, LoginForm, ResetPasswordForm
 
 from apps import user_datastore
 from apps.auth.forms import MyRegisterForm
-from apps.auth.models import User
 from apps.database import db
-from apps.auth.services import generate_and_send_auth_token
+from apps.auth.services import generate_and_send_confirm_token, generate_and_send_reset_token
 from apps.auth.token import confirm_token
+from apps.email.consts import EMAIL_DATA
 
 module = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -31,8 +31,8 @@ def confirm_email(token):
     if current_user.confirmed:
         flash("Account already confirmed.", "success")
         return redirect(url_for("core.home"))
-    email = confirm_token(token)
-    user = User.query.filter_by(email=current_user.email).first_or_404()
+    email = confirm_token(token, EMAIL_DATA['USER_REGISTER_EMAIL']['purpose'])
+    user = user_datastore.find_user(email=current_user.email)
     if user.email == email:
         user.confirmed = True
         user.confirmed_on = datetime.now()
@@ -56,7 +56,7 @@ def register():
         )
         user_datastore.add_role_to_user(user, user_datastore.find_role('user'))
         db.session.commit()
-        generate_and_send_auth_token(email=user.email)
+        generate_and_send_confirm_token(email=user.email)
         login_user(user)
 
         flash("A confirmation email has been sent via email.", "success")
@@ -70,7 +70,7 @@ def resend_confirm_email():
     if current_user.confirmed:
         flash("Your account has already been confirmed.", "success")
         return redirect(url_for("core.home"))
-    generate_and_send_auth_token(email=current_user.email)
+    generate_and_send_confirm_token(email=current_user.email)
     flash("A new confirmation email has been sent.", "success")
     return redirect(url_for("home.inactive_account"))
 
@@ -85,26 +85,31 @@ def logout():
 
 @module.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
+    if current_user.is_authenticated:
+        return redirect(url_for('home.home'))
     form = ForgotPasswordForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        return redirect(url_for('auth.new_password_test', user_id=user.id))
+        generate_and_send_reset_token(email=form.email.data)
+        flash('Password reset instruction was send to your email.', 'success')
+        return redirect(url_for('home.home'))
     return render_template('auth/reset_password.html', form=form)
 
 
-@module.route('/new_password_test/<user_id>', methods=['GET', 'POST'])
-def new_password_test(user_id):
-    # TODO: simple logic for tests, change to normal sending and changing password by token from
-    #  send_reset_password_instructions()
-    form = ResetPasswordForm(user=User.query.get(user_id))
+@module.route('/new_password/<token>', methods=['GET', 'POST'])
+def new_password(token):
+    if current_user.is_authenticated:
+        flash('You already log in.', 'info')
+        return redirect(url_for('home.home'))
+    email = confirm_token(token, EMAIL_DATA['USER_FORGOT_PASSWORD_EMAIL']['purpose'])
+    if not email:
+        flash('Token is expired.', 'warning')
+        return redirect(url_for('home.home'))
+    form = ResetPasswordForm()
+    form.user = user_datastore.find_user(email=email)
     if form.validate_on_submit():
-        form.user.password = hash_password(form.password.data)
+        user = user_datastore.find_user(email=email)
+        user.password = hash_password(form.password.data)
         db.session.commit()
         flash('Your password has been reset successfully.', 'success')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('home.home'))
     return render_template('auth/new_password.html', form=form)
-
-
-@module.route('/new_password/<user_id>', methods=['GET', 'POST'])
-def new_password(user_id):
-    pass
