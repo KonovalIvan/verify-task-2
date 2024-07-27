@@ -1,4 +1,4 @@
-/* Body
+/* body
 ------------------------------------------------------- */
 .admin_panel {
     margin-top: 50px;
@@ -65,7 +65,7 @@
 
 /* Buttons
 ------------------------------------------------------- */
-.btn__lock, .btn__unlock, .btn__add, .btn__sub, .btn__delete, .btn__user_manager {
+.btn__lock, .btn__unlock, .btn__add, .btn__sub, .btn__delete {
     width: 22px;
     height: 22px;
     border-radius: 4px;
@@ -79,11 +79,6 @@
 .btn__lock {
     background-color: red;
     background-image: url("../../img/lock.png");
-}
-
-.btn__user_manager {
-    background-color: greenyellow;
-    background-image: url("../../img/user_manager.png");
 }
 
 .btn__delete {

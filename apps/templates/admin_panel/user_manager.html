@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Account{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_panel/user_manager.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/user_manager.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="intro">
+        <h1 class="intro__head">User manager</h1>
+        {% for message in get_flashed_messages() %}
+            <p class="description">{{ message }}</p>
+        {% endfor %}
+    </div>
+    <div class="admin_panel">
+    </div>
+{% endblock %}
