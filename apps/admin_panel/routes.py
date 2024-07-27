@@ -26,16 +26,15 @@ def admin_panel():
 
 @module.route('/delete_user/<user_id>')
 def delete_user(user_id):
-    user = User.query.get(user_id)
-    user_datastore.delete_user(user)
+    _user = User.query.get(user_id)
+    user_datastore.delete_user(_user)
     db.session.commit()
-    flash(f'{user.name} {user.surname} has been deleted', 'success')
+    flash(f'{_user} has been deleted', 'success')
     return redirect(request.referrer)
 
 
 @module.route('/force_create_user', methods=['GET', 'POST'])
 def force_create_user():
-    # TODO: DO not send email, admin can create user without confirm
     form = MyRegisterForm()
     if form.validate_on_submit():
         user = user_datastore.create_user(
@@ -44,49 +43,49 @@ def force_create_user():
             email=form.email.data,
             phone=form.phone.data,
             password=hash_password(form.password.data),
+            confirmed=True,
         )
         user_datastore.add_role_to_user(user, user_datastore.find_role('user'))
         db.session.commit()
-        return redirect(request.referrer)
+        return redirect(url_for('admin_panel.admin_panel'))
     return render_template('auth/register.html', form=form)
 
 
 @module.route('/deactivate/<user_id>')
 def deactivate(user_id):
-    user = User.query.get(user_id)
-    user_datastore.deactivate_user(user)
+    _user = user_datastore.find_user(id=user_id)
+    user_datastore.deactivate_user(_user)
     db.session.commit()
-    flash(f'{user.name} {user.surname} has been deactivated', 'success')
+    flash(f'{_user} has been deactivated', 'success')
     return redirect(request.referrer or url_for('home.home'))
 
 
 @module.route('/activate/<user_id>')
 def activate(user_id):
-    user = User.query.get(user_id)
-    user_datastore.activate_user(user)
+    _user = user_datastore.find_user(id=user_id)
+    user_datastore.activate_user(_user)
     db.session.commit()
-    flash(f'{user.name} {user.surname} has been activated', 'success')
+    flash(f'{_user} has been activated', 'success')
     return redirect(request.referrer or url_for('home.home'))
 
 
 @module.route('/add_permission/<user_id>/<role_name>')
 def add_permission(user_id, role_name):
-    user = User.query.get(user_id)
-    role = user_datastore.find_role(role_name)
-    user.roles.append(role)
+    _user = user_datastore.find_user(id=user_id)
+    _role = user_datastore.find_role(role_name)
+    user_datastore.add_role_to_user(_user, _role)
     db.session.commit()
-    flash(f'Permission {role_name} for {user.name} {user.surname} has been added', 'success')
+
+    flash(f'Permission {role_name} for {_user} has been added', 'success')
     return redirect(request.referrer or url_for('home.home'))
 
 
 @module.route('/cancel_permission/<user_id>/<role_name>')
 def cancel_permission(user_id, role_name):
-    user = User.query.get(user_id)
-    role = user_datastore.find_role(role_name)
-    if role in user.roles:
-        user.roles.remove(role)
-        db.session.commit()
-        flash(f'Permission {role_name} for {user.name} {user.surname} has been removed', 'success')
-    else:
-        flash(f'Permission {role_name} doesnt exist', 'error')
+    _user = user_datastore.find_user(id=user_id)
+    _role = user_datastore.find_role(role_name)
+    user_datastore.remove_role_from_user(_user, _role)
+    db.session.commit()
+
+    flash(f'Permission {role_name} for {_user} has been removed', 'success')
     return redirect(request.referrer or url_for('home.home'))

@@ -53,10 +53,12 @@ def create_app():
     import apps.auth.routes as auth
     import apps.admin_panel.routes as admin_panel
     import apps.user_panel.routes as user_panel
+    import apps.email.routes as email
 
     app.register_blueprint(home.module)
     app.register_blueprint(auth.module, url_prefix='/auth')
     app.register_blueprint(admin_panel.module, url_prefix='/admin_panel')
     app.register_blueprint(user_panel.module, url_prefix='/user_panel')
+    app.register_blueprint(email.module, url_prefix='/email')
 
     return app
