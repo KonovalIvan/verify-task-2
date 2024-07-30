@@ -15,7 +15,49 @@
         {% for message in get_flashed_messages() %}
             <p class="description">{{ message }}</p>
         {% endfor %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p class="description error">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
     </div>
-    <div class="admin_panel">
+    <div class="manager_panel">
+        <div class="manager_panel__group">
+            <h3 class="group__head">User info</h3>
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <div class="group__user_info">
+                    {{ form.name(class="form-control group__field") }}
+                    {{ form.surname(class_="form-control group__field") }}
+                    {{ form.email(class="control group__field") }}
+                    {{ form.phone(class="control group__field") }}
+                    <div class="group__check_group">
+                        {{ form.confirmed() }}
+                        {{ form.confirmed.label(class="group__field") }}
+                    </div>
+                    <div class="group__check_group">
+                        {{ form.phone_confirmed() }}
+                        {{ form.phone_confirmed.label(class="group__field") }}
+                    </div>
+                    <div class="group__check_group">
+                        {{ form.active() }}
+                        {{ form.active.label(class="group__field") }}
+                    </div>
+                </div>
+                <div class="btn__group">
+                    <a class="btn btn__reset_password" href="{{ url_for('admin_panel.reset_user_password', user_email = form.email.data )}}">Reset
+                        password</a>
+                    {{ form.submit(class="btn btn__save") }}
+                </div>
+            </form>
+        </div>
+        <div class="manager_panel__group">
+        </div>
+        <div class="manager_panel__group">
+            <h3 class="group__head">User logs</h3>
+            <div class="btn__group">
+                <a class="btn btn__show_all_logs" href="{{ url_for('home.home') }}">Show all logs</a>
+            </div>
+        </div>
     </div>
 {% endblock %}

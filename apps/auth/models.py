@@ -10,6 +10,7 @@ roles_users = db.Table(
 
 
 class User(db.Model, UserMixin):
+    # TODO: add phone confirming
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     surname = db.Column(db.String(120), nullable=False)
@@ -20,8 +21,8 @@ class User(db.Model, UserMixin):
                             backref=db.backref('users', lazy='dynamic'))
     active = db.Column(db.Boolean(), default=True)
     fs_uniquifier = db.Column(db.String(64), unique=True)
-    confirmed = db.Column(db.Boolean, nullable=False, default=False)
-    confirmed_on = db.Column(db.DateTime, nullable=True)
+    confirmed = db.Column(db.Boolean(), nullable=False, default=False)
+    confirmed_on = db.Column(db.DateTime(), nullable=True)
 
     def __repr__(self):
         return f'{self.name} {self.surname}'

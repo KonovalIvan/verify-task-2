@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import current_user, login_required
+from flask_security import hash_password, get_hmac
 
-from apps import login_manager, app
+from apps import login_manager, app, user_datastore, db
 from apps.auth.models import User
 
 module = Blueprint('home', __name__)

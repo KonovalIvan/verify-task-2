@@ -1,101 +1,66 @@
+blockquote {
+    margin: 0;
+    align-items: flex-start;
+}
+
 /* body
 ------------------------------------------------------- */
-.admin_panel {
+.manager_panel {
     margin-top: 50px;
-    text-align: center;
     display: flex;
-    flex-flow: column;
-    align-items: center;
+    justify-content: space-between;
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
-.account_element, .admin_panel__header {
+.manager_panel__group {
     border-radius: 10px;
-    width: 90%;
+    width: 30%;
     background-color: #F3F3F3;
-    text-align: center;
+    height: 550px;
     display: flex;
-    flex-flow: row;
-    margin-bottom: 10px;
-}
-
-.account_element__inactive {
-    background-color: #FFC0C0;
-}
-
-.add_user {
-    justify-content: center;
     align-items: center;
+    flex-direction: column;
 
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    color: black;
-    text-transform: uppercase;
-    text-align: center;
-    text-decoration: none;
-
-    min-height: 50px;
 }
 
-.admin_panel__header {
-    background-color: #D9D9D9;
-}
-
-.admin_header__element {
-    width: 20vw;
-    justify-content: center;
-}
-
-.role_elements {
+.group__user_info {
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    width: 20vw;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 60px;
 }
 
-.role__element {
-    height: 22px;
-    background-color: #D9D9D9;
-    border: none;
-    border-radius: 4px;
-    color: #483838;
-}
-
-/* Buttons
-------------------------------------------------------- */
-.btn__lock, .btn__unlock, .btn__add, .btn__sub, .btn__delete {
-    width: 22px;
-    height: 22px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    object-fit: fill;
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.btn__lock {
-    background-color: red;
-    background-image: url("../../img/lock.png");
-}
-
-.btn__delete {
+.group__field {
+    margin-bottom: 20px;
+    margin-top: 0;
+    font-size: 18px;
+    display:inline-block;
+    border-radius: 0;
+    border-color: transparent;
     background-color: transparent;
-    background-image: url("../../img/delete.png");
-    display: inline-block;
 }
 
-.btn__unlock {
+.group__check_group {
+    margin-top: 0;
+}
+
+/* btn
+------------------------------------------------------- */
+.btn__group {
+    margin-top: auto;
+}
+
+.btn__reset_password {
+    background-color: blue;
+}
+
+.btn__save {
+    margin-top: auto;
     background-color: green;
-    background-image: url("../../img/unlock.png");
 }
 
-.btn__add {
-    background-image: url("../../img/add.png");
-}
-
-.btn__sub {
-    background-image: url("../../img/subtract.png");
+.btn__show_all_logs {
+    background-color: #483838;
 }

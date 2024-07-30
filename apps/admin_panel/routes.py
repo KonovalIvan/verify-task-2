@@ -1,25 +1,27 @@
 from flask import redirect, url_for, Blueprint, request, flash, render_template
-from flask_login import login_required
+from flask_login import login_required, current_user
 from flask_security import roles_required, hash_password
 
 from apps import user_datastore
+from apps.admin_panel.forms import UserInfoForm
 from apps.auth.models import User, Role
+from apps.auth.services import generate_and_send_reset_token
 from apps.database import db
 from apps.auth.forms import MyRegisterForm
 
 module = Blueprint('admin_panel', __name__, url_prefix='/admin_panel')
 
 
-@module.before_request
-@login_required
-@roles_required('admin')
-def before_request():
-    pass
+# @module.before_request
+# @login_required
+# @roles_required('admin')
+# def before_request():
+#     pass
 
 
 @module.route('/admin_panel')
 def admin_panel():
-    users = User.query.all()
+    users = User.query.filter(User.id != current_user.id)
     roles = Role.query.all()
     return render_template('admin_panel/admin_panel.html', users=users, roles=roles)
 
@@ -38,12 +40,12 @@ def force_create_user():
     form = MyRegisterForm()
     if form.validate_on_submit():
         user = user_datastore.create_user(
-            name=form.name.data,
-            surname=form.surname.data,
-            email=form.email.data,
-            phone=form.phone.data,
-            password=hash_password(form.password.data),
-            confirmed=True,
+                name=form.name.data,
+                surname=form.surname.data,
+                email=form.email.data,
+                phone=form.phone.data,
+                password=hash_password(form.password.data),
+                confirmed=True,
         )
         user_datastore.add_role_to_user(user, user_datastore.find_role('user'))
         db.session.commit()
@@ -91,7 +93,24 @@ def cancel_permission(user_id, role_name):
     return redirect(request.referrer or url_for('home.home'))
 
 
-@module.route('/user_manager/<user_id>', methods=['GET'])
+@module.route('/user_manager/<user_id>', methods=['GET', 'POST'])
 def user_manager(user_id):
-    _user = user_datastore.find_user(id=user_id)
-    return render_template('admin_panel/user_manager.html', user=_user)
+    user = User.query.get_or_404(user_id)
+    form = UserInfoForm(obj=user)
+    form.user = user
+    if form.validate_on_submit():
+        print(user)
+        form.populate_obj(user)
+        db.session.commit()
+
+        flash(f'User {user} has been updated', 'success')
+        return redirect(url_for('admin_panel.admin_panel'))
+        # return redirect(request.referrer or url_for('user_manager/<user_id>', user_id=user_id))
+    return render_template('admin_panel/user_manager.html', form=form)
+
+
+@module.route('/reset_user_password/<user_email>')
+def reset_user_password(user_email):
+    generate_and_send_reset_token(email=user_email)
+    flash('Password reset instruction was send to your email.', 'success')
+    return redirect(request.referrer or url_for('home.home'))

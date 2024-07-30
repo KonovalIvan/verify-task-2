@@ -90,7 +90,7 @@ def reset_password():
     form = ForgotPasswordForm()
     if form.validate_on_submit():
         generate_and_send_reset_token(email=form.email.data)
-        flash('Password reset instruction was send to your email.', 'success')
+        flash(f'Password reset instruction was send to {form.email.data}.', 'success')
         return redirect(url_for('home.home'))
     return render_template('auth/reset_password.html', form=form)
 
